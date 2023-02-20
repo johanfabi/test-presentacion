@@ -7,3 +7,4 @@ Feature: Búsqueda simple en Google
   Scenario: Busqueda simple en Google
     When Escribo en el input de busqueda
     Then Mostrar el resultado de la busqueda
+

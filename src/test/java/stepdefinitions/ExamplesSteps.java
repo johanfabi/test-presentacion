@@ -19,8 +19,8 @@ public class ExamplesSteps {
      */
 
     @Given("Iniciar sitio web Google")
-    public void iniciarSitioWebGoogle() {
-        ExamplePage.abrirLocal("https://www.google.com/");
+    public void iniciarSitioWebGoogle() throws MalformedURLException {
+        ExamplePage.openSelenoid("https://www.google.com/");
     }
 
     /**
@@ -31,12 +31,12 @@ public class ExamplesSteps {
 
     @When("Escribo en el input de busqueda")
     public void escriboEnElInputDeBusqueda() throws InterruptedException {
-        ExamplePage.escribirBusqueda("Perro");
+        ExamplePage.escribirBusqueda("Autos");
         Thread.sleep(1000);
     }
 
     @Then("Mostrar el resultado de la busqueda")
     public void mostrarElResultadoDeLaBusqueda() {
-        ExamplePage.validarTitulo("Perro");
+        ExamplePage.validarTitulo("Autos");
     }
 }

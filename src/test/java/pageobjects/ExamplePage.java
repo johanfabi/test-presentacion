@@ -1,98 +1,146 @@
 package pageobjects;
 
+import io.cucumber.java.After;
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.support.FindBy;
-
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import static javax.swing.UIManager.put;
+import org.openqa.selenium.JavascriptExecutor;
 
 public class ExamplePage {
 
-    /* Definir WebDriver */
+    /* Driver Definition */
     private static RemoteWebDriver driver;
 
     /**
      ***************************************************************************************************
-     * Elementos globales del sitio web
+     * Get environments variables
      ***************************************************************************************************
      */
 
-    /* Input de búsqueda */
-    // @FindBy(name = "q")
-    // public static WebElement inputSearch;
+    // public static String user = System.getenv().get("USER");
+    // public static String pass = System.getenv().get("PASS");
+    public static String tags = System.getenv().get("TAGS");
 
     /**
      ***************************************************************************************************
-     * Métodos, funciones y procedimientos para interactuar con los elementos de la página
+     * Browser Configuration
      ***************************************************************************************************
      */
 
-    /* Abrir el sitio web en local */
-    public static void abrirLocal(String url){
+    /* Open Local Driver */
+    public static void openLocal(String url, String title){
         System.setProperty("webdriver.chrome.driver","src/test/resources/drivers/chromedriver.exe");
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.get(url);
+        String pageTitle = driver.getTitle();
+        Assert.assertEquals(pageTitle,title);
     }
 
-    /* Abrir el sitio web en Selenoid */
-    public static void abrirSelenoid(String url) throws MalformedURLException {
+    /* Open with Selenoid */
+    public static void openWithSelenoid(String url, String title) throws MalformedURLException {
+        String URL = "http://192.168.1.75:4444/wd/hub";
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("browserName", "chrome");
-        capabilities.setCapability("browserVersion", "109.0");
-        capabilities.setCapability("enableVNC", true);
-        capabilities.setCapability("enableVideo", true);
-        driver = new RemoteWebDriver(new URL("http://34.67.214.112:4444/wd/hub"), capabilities);
+        HashMap<String, Object> selenoidOptions = new HashMap<String, Object>();
+        selenoidOptions.put("browserVersion", "110.0");
+        selenoidOptions.put("name", "Example Functional Testing" + tags);
+        selenoidOptions.put("enableVideo", true);
+        selenoidOptions.put("videoName", "Example Functional Testing.mp4");
+        selenoidOptions.put("enableVNC", true);
+        selenoidOptions.put("enableLog", true);
+        capabilities.setCapability("selenoid:options", selenoidOptions);
+        driver = new RemoteWebDriver(new URL(URL), capabilities);
         driver.manage().window().maximize();
         driver.get(url);
+        String pageTitle = driver.getTitle();
+        Assert.assertEquals(pageTitle,title);
     }
 
-    public static void openSelenoid(String url) throws MalformedURLException {
-        ChromeOptions options = new ChromeOptions();
-        options.setCapability("browserVersion", "109.0");
-        options.setCapability("selenoid:options", new HashMap<String, Object>() {{
-            /* How to add test badge */
-            put("name", "Test badge...");
-            /* How to set session timeout */
-            put("sessionTimeout", "15m");
-            /* How to set timezone */
-            put("env", new ArrayList<String>() {{
-                add("TZ=UTC");
-            }});
-            /* How to add "trash" button */
-            put("labels", new HashMap<String, Object>() {{
-                put("manual", "true");
-            }});
-            /* How to enable video recording */
-            put("enableVideo", true);
-        }});
-        RemoteWebDriver driver = new RemoteWebDriver(new URL("http://34.67.214.112:4444/wd/hub"), options);
+    /* Open with BrowserStack */
+    public static void openWithBrowserStack(String url, String title) throws MalformedURLException {
+        String AUTOMATE_USERNAME = "devopsfunctional_q39rj7";
+        String AUTOMATE_ACCESS_KEY = "xktqbPXghHMxfREuCyWZ";
+        String URL = "https://" + AUTOMATE_USERNAME + ":" + AUTOMATE_ACCESS_KEY + "@hub-cloud.browserstack.com/wd/hub";
+        MutableCapabilities capabilities = new MutableCapabilities();
+        capabilities.setCapability("browserName", "Chrome");
+        HashMap<String, Object> browserstackOptions = new HashMap<String, Object>();
+        browserstackOptions.put("browserVersion", "110.0");
+        browserstackOptions.put("os", "Windows");
+        browserstackOptions.put("osVersion", "11");
+        browserstackOptions.put("projectName", "BeDevOps");
+        browserstackOptions.put("buildName", "Example Functional Testing");
+        browserstackOptions.put("sessionName", "@Test1");
+        browserstackOptions.put("debug", "true");
+        capabilities.setCapability("bstack:options", browserstackOptions);
+        driver = new RemoteWebDriver(new URL(URL), capabilities);
+        driver.manage().window().maximize();
+        driver.get(url);
+        String pageTitle = driver.getTitle();
+        Assert.assertEquals(pageTitle,title);
     }
 
-    /* Ingresar texto en el input de búsqueda */
-    public static void escribirBusqueda(String busqueda) {
+    /* Quit Driver */
+    public static void quitDriver() {
+        driver.quit();
+    }
+
+    /**
+     ***************************************************************************************************
+     * Test Case @Test1 - Methods, functions, procedures, actions
+     ***************************************************************************************************
+     */
+
+    /* Login */
+    public static void login() {
+        WebElement inputUser = driver.findElement(By.id("username"));
+        inputUser.clear();
+        inputUser.sendKeys("tomsmith");
+
+        WebElement inputPass = driver.findElement(By.id("password"));
+        inputPass.clear();
+        inputPass.sendKeys("SuperSecretPassword!");
+
+        WebElement btnLogin = driver.findElement(By.xpath("//button[@type='submit']"));
+        btnLogin.click();
+    }
+
+    /* Validate login */
+    public static void validateLogin() {
+        WebElement secureArea = driver.findElement(By.xpath("//div[@id='content']/div/h4"));
+        String welcomeMessage = secureArea.getText();
+        System.out.println("Secure Area Message: " + welcomeMessage);
+        String message = "Welcome to the Secure Area. When you are done click logout below.";
+        Assert.assertEquals(welcomeMessage,message);
+    }
+
+    /**
+     ***************************************************************************************************
+     * Test Case @Test2 - Methods, functions, procedures, actions
+     ***************************************************************************************************
+     */
+
+    /* Enter search */
+    public static void writeSearch(String search) {
         WebElement inputSearch = driver.findElement(By.name("q"));
         inputSearch.clear();
-        System.out.println("Buscar en Google:" + busqueda);
-        inputSearch.sendKeys(busqueda);
+        System.out.println("Google Search:" + search);
+        inputSearch.sendKeys(search);
         inputSearch.sendKeys(Keys.ENTER);
     }
 
-    /* Validar el título de la página */
-    public static void validarTitulo(String titulo) {
-        String title = driver.getTitle();
-        Assert.assertEquals(title,titulo + " - Buscar con Google");
-        driver.close();
+    /* Validate page title */
+    public static void validatePageTitle(String title) {
+        String pageTitle = driver.getTitle();
+        Assert.assertEquals(pageTitle,title + " - Buscar con Google");
     }
 }

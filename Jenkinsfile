@@ -12,7 +12,7 @@ pipeline {
                 print('Checkout SCM')
                 print('========================================================================================================')
                 checkout([$class: 'GitSCM', branches: [[name: "*/main"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [],
-                userRemoteConfigs: [[credentialsId: 'github-credentials', url: "https://github.com/johanfabi/test-selenium"]]])
+                userRemoteConfigs: [[credentialsId: 'github-credentials', url: "https://github.com/johanfabi/test-presentacion"]]])
             }
         }
         stage('SonarQube Analysis') {
@@ -39,7 +39,7 @@ pipeline {
         stage('Test') {
             steps {
                 print('========================================================================================================')
-                print('Test Execute ${TAGS}')
+                print('Test Execute')
                 print('========================================================================================================')
                 sh 'mvn -v'
                 sh '''

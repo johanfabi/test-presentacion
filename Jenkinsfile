@@ -33,7 +33,7 @@ pipeline {
                 print('Tests: Checkout SCM')
                 print('========================================================================================================')
                 checkout([$class: 'GitSCM', branches: [[name: "*/main"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [],
-                userRemoteConfigs: [[credentialsId: 'github-credentials', url: "https://github.com/johanfabi/test-presentacion"]]])
+                userRemoteConfigs: [[credentialsId: 'github-credentials', url: "https://github.com/johanfabi/bedevops-functional-testing.git"]]])
                 print('========================================================================================================')
                 print('Run Functional Tests - ' + 'Case: ' + env.TAGS)
                 print('========================================================================================================')

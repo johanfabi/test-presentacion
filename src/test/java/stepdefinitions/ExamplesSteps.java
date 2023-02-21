@@ -16,7 +16,7 @@ public class ExamplesSteps {
 
     @Given("Cargo el sitio web HerokuApp")
     public void cargoElSitioWebHerokuApp() throws MalformedURLException {
-        ExamplePage.openWithBrowserStack("https://the-internet.herokuapp.com/login", "The Internet");
+        ExamplePage.openLocal("https://the-internet.herokuapp.com/login", "The Internet");
     }
 
     @When("Escribo el usuario y password")

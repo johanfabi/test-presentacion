@@ -39,7 +39,7 @@ pipeline {
         stage('Run Functional Tests') {
             steps {
                 print('========================================================================================================')
-                print('Run Functional Tests' + 'Test Case: ' + env.TAGS)
+                print('Run Functional Tests - ' + 'Case: ' + env.TAGS)
                 print('========================================================================================================')
                 sh 'mvn -v'
                 sh '''

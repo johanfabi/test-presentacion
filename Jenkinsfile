@@ -30,7 +30,7 @@ pipeline {
         stage('Run Functional Tests') {
             steps {
                 print('========================================================================================================')
-                print('Tests Checkout SCM')
+                print('Tests: Checkout SCM')
                 print('========================================================================================================')
                 checkout([$class: 'GitSCM', branches: [[name: "*/main"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [],
                 userRemoteConfigs: [[credentialsId: 'github-credentials', url: "https://github.com/johanfabi/test-presentacion"]]])

@@ -53,9 +53,9 @@ public class ExamplePage {
         capabilities.setCapability("browserName", "chrome");
         HashMap<String, Object> selenoidOptions = new HashMap<String, Object>();
         selenoidOptions.put("browserVersion", "110.0");
-        selenoidOptions.put("name", "Example Functional Testing" + tags);
+        selenoidOptions.put("name", "Case: " + tags + " - Example Functional Testing");
         selenoidOptions.put("enableVideo", true);
-        selenoidOptions.put("videoName", "Example Functional Testing.mp4");
+        selenoidOptions.put("videoName", "Case: " + tags + " - Example Functional Testing.mp4");
         selenoidOptions.put("enableVNC", true);
         selenoidOptions.put("enableLog", true);
         capabilities.setCapability("selenoid:options", selenoidOptions);
@@ -78,8 +78,8 @@ public class ExamplePage {
         browserstackOptions.put("os", "Windows");
         browserstackOptions.put("osVersion", "11");
         browserstackOptions.put("projectName", "BeDevOps");
-        browserstackOptions.put("buildName", "Example Functional Testing");
-        browserstackOptions.put("sessionName", "@Test1");
+        browserstackOptions.put("buildName", "Case: " + tags + " - Example Functional Testing");
+        browserstackOptions.put("sessionName", tags);
         browserstackOptions.put("debug", "true");
         capabilities.setCapability("bstack:options", browserstackOptions);
         driver = new RemoteWebDriver(new URL(URL), capabilities);

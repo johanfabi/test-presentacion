@@ -1,0 +1,8 @@
+# Directories
+target/
+
+# IDES directories
+.vscode/
+.idea/
+
+
